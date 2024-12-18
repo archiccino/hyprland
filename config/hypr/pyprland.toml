@@ -1,0 +1,13 @@
+[pyprland]
+plugins = [
+  "scratchpads",
+  "toggle_dpms",
+  "magnify",
+]
+
+[scratchpads.term]
+animation = "fromTop"
+command = "kitty --class kitty-dropterm"
+class = "kitty-dropterm"
+size = "50% 30%"
+

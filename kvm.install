@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# Script to install and configure QEMU/KVM on Arch Linux
+# Author: [Your Name]
+# Version: 1.0
+
+# Check for root privileges
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Please run this script as root (use sudo)."
+    exit 1
+fi
+
+echo "Installing QEMU/KVM and required tools..."
+
+# Step 1: Install KVM-related packages
+pacman -Syu qemu-full libvirt virt-manager virt-viewer ebtables dnsmasq bridge-utils openbsd-netcat
+
+# Step 2: Enable and start libvirtd service
+echo "Enabling and starting libvirtd service..."
+systemctl enable --now libvirtd
+
+# Step 3: Verify KVM support
+echo "Checking for virtualization support..."
+if [[ $(grep -E 'vmx|svm' /proc/cpuinfo) ]]; then
+    echo "Virtualization support detected."
+else
+    echo "No virtualization support detected. Ensure VT-x or AMD-V is enabled in the BIOS."
+    exit 1
+fi
+
+# Step 4: Configure user permissions for libvirt
+echo "Configuring user permissions for libvirt..."
+
+# Add your user to the libvirt and kvm groups
+CURRENT_USER=$(logname)
+usermod -aG libvirt,kvm "$CURRENT_USER"
+
+echo "User '$CURRENT_USER' added to libvirt and kvm groups."
+
+# Step 5: Configure libvirt to use QEMU
+echo "Setting up QEMU/KVM for libvirt..."
+
+# Edit libvirt config to ensure QEMU driver is used
+sed -i 's/#unix_sock_group = "libvirt"/unix_sock_group = "libvirt"/' /etc/libvirt/libvirtd.conf
+sed -i 's/#unix_sock_rw_perms = "0770"/unix_sock_rw_perms = "0770"/' /etc/libvirt/libvirtd.conf
+
+# Restart libvirtd to apply changes
+systemctl restart libvirtd
+
+# Step 6: Verify Installation
+echo "Verifying QEMU/KVM installation..."
+if virsh list --all > /dev/null 2>&1; then
+    echo "QEMU/KVM and libvirt are successfully installed and configured."
+else
+    echo "Something went wrong. Please check the installation logs."
+    exit 1
+fi
+
+# Step 7: Install additional tools (optional)
+read -p "Do you want to install additional tools like spice, OVMF, and edk2 for UEFI VMs? (y/n): " install_extras
+if [[ "$install_extras" == "y" ]]; then
+    pacman -S spice edk2-ovmf
+    echo "Installing OVMF firmware for UEFI VM support..."
+    mkdir -p /etc/libvirt/qemu
+    cp /usr/share/edk2-ovmf/x64/OVMF_CODE.fd /etc/libvirt/qemu/OVMF_CODE.fd
+    cp /usr/share/edk2-ovmf/x64/OVMF_VARS.fd /etc/libvirt/qemu/OVMF_VARS.fd
+    echo "UEFI firmware installed."
+fi
+
+echo "Installation complete. Please reboot your system for changes to take effect."
+
