@@ -1,4 +1,7 @@
-yay -S hyprland pyprland hyprpaper hyprlock ttf-fantasque-nerd zoxide github-cli zsh xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-kde wofi wl-clipboard vlc vi uwsm unzip ttf-hack slurp grim reflector qt5ct-kde qt5-styleplugins pulseaudio-bluetooth pulseaudio-alsa pulseaudio pavucontrol nwg-look ntfs-3g networkmanager neovim kitty gzip gthumb firefox flatpak dolphin brightnessctl bluez-utils bluez blueman git alsa-utils alacritty visual-studio-code-bin hyprpolkitagent tmux atuin btop powertop dust qt6ct-kde kvantum breeze-icons
-
+yay -S hyprland pyprland hyprpaper hyprlock ttf-fantasque-nerd zoxide github-cli zsh xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-kde wofi wl-clipboard vlc vi uwsm unzip ttf-hack slurp grim reflector qt5ct-kde qt5-styleplugins pulseaudio-bluetooth pulseaudio-alsa pulseaudio pavucontrol nwg-look ntfs-3g networkmanager neovim kitty gzip gthumb firefox flatpak dolphin brightnessctl bluez-utils bluez blueman git alsa-utils alacritty visual-studio-code-bin hyprpolkitagent tmux atuin btop powertop dust qt6ct-kde kvantum breeze-icons catppuccin-sddm-theme-macchiato sddm hypridle zsh-completions hyprland-qtutils glow
 
 sudo sed -i "s|Exec=/usr/bin/code %F|Exec=/usr/bin/code --no-sandbox --unity-launch --enable-features=UseOzonePlatform --ozone-platform=wayland %F|" /usr/share/applications/code.desktop
+
+sudo rm /usr/share/wayland-sessions/hyprland-systemd.desktop
+
+flatpak install flathub org.js.nuclear.Nuclear

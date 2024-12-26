@@ -2,33 +2,35 @@ mkdir $HOME/desktop-config/bin
 export PATH="$HOME/desktop-config/bin:$PATH"
 curl -s https://ohmyposh.dev/install.sh | bash -s -- -d ~/desktop-config/bin
 
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/plugins/zsh-autosuggestions
-echo "source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" >> $HOME/.zshrc
+ZSH_PLUGIN_PATH=~/desktop-config/zsh/plugins
 
-git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/plugins/zsh-syntax-highlighting
-echo "source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> $HOME/.zshrc
+git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_PLUGIN_PATH/zsh-autosuggestions
+echo "source $ZSH_PLUGIN_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh" >> $HOME/.zshrc
 
-git clone https://github.com/rupa/z.git ~/z
-echo "source ~/z/z.sh" >> .zshrc
+git clone https://github.com/zsh-users/zsh-syntax-highlighting $ZSH_PLUGIN_PATH/zsh-syntax-highlighting
+echo "source $ZSH_PLUGIN_PATH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> $HOME/.zshrc
 
-git clone https://github.com/zsh-users/zsh-completions ~/.zsh/plugins/zsh-completions
-echo "fpath=($fpath ~/.zsh/plugins/zsh-completions)" >> $HOME/.zshrc
+git clone https://github.com/rupa/z.git $ZSH_PLUGIN_PATH/z
+echo "source $ZSH_PLUGIN_PATH/z/z.sh" >> $HOME/.zshrc
 
-git clone https://github.com/zsh-users/zsh-history-substring-search ~/.zsh/plugins/zsh-history-substring-search
-echo "source ~/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh" >> $HOME/.zshrc
+git clone https://github.com/zsh-users/zsh-completions $ZSH_PLUGIN_PATH/zsh-completions
+echo "fpath=($fpath $ZSH_PLUGIN_PATH/zsh-completions)" >> $HOME/.zshrc
 
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.zsh/pluginsfzf
-~/.zsh/plugins/fzf/install
+git clone https://github.com/zsh-users/zsh-history-substring-search $ZSH_PLUGIN_PATH/zsh-history-substring-search
+echo "source $ZSH_PLUGIN_PATHzsh-history-substring-search/zsh-history-substring-search.zsh" >> $HOME/.zshrc
+
+git clone --depth 1 https://github.com/junegunn/fzf.git $ZSH_PLUGIN_PATH/fzf
+$ZSH_PLUGIN_PATH/fzf/install
 echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> $HOME/.zshrc
 
-git clone https://github.com/djui/alias-tips.git ~/.zsh/plugins/alias-tips
-echo "source ~/.zsh/plugins/alias-tips/alias-tips.plugin.zsh" >> $HOME/.zshrc
+git clone https://github.com/djui/alias-tips.git $ZSH_PLUGIN_PATH/alias-tips
+echo "source $ZSH_PLUGIN_PATH/alias-tips/alias-tips.plugin.zsh" >> $HOME/.zshrc
 
 cp $HYPRSETUP/resources/common-aliases.zsh $HOME/desktop-config/
 echo "source $HOME/desktop-config/common-aliases.zsh"
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-echo "eval '$(zoxide init zsh)'" >> .zshrc
+echo "eval '$(zoxide init --cmd cd zsh)'" >> .zshrc
 
-sudo pacman -S imagemagick
+#sudo pacman -S imagemagick
